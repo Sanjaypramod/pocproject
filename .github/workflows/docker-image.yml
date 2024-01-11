@@ -1,27 +1,59 @@
-name: Deploy to EKS
+name: Deploy Docker Application to EKS
 
 on:
   push:
     branches:
-      - master  # Change this to your main branch
+      - master
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: nginx-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Configure AWS Credentials
+      - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-west-2  # Replace with your AWS region
+          aws-region: us-west-2
 
-      - name: Update Kubeconfig
-        run: aws eks --region us-west-2 update-kubeconfig --name sanjay_poc_cluster  # Replace with your EKS cluster name
+     # - name: Build and Push Docker Image to ECR
+     #   id: docker_build
+     #   run: |
+     #     COMMIT_ID=$(git rev-parse --short=7 ${{ github.sha }})
+          # Tagging the Docker image for ECR
+     #     docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com/visalrepository:$COMMIT_ID --build-arg AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} --build-arg AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} .
+          # Logging into ECR
+     #      aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com
+          # Pushing the Docker image to ECR
+     #    docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com/visalrepository:$COMMIT_ID
+     #     echo "::set-output name=commit_id::$COMMIT_ID"
+     #     docker images
+
+      - name: Configure Kubernetes Context
+        run: |
+          aws eks --region us-west-2 update-kubeconfig --name visal-cluster
+
+    #  - name: Update application.yml
+    #    run: |
+    #      sed -i "s|image: visalmk/docker-image:latest|image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com/visalrepository:${{ steps.docker_build.outputs.commit_id }}|" application.yml
 
       - name: Deploy to EKS
-        run: kubectl apply -f deployment.yaml
+        run: |
+          #kubectl delete -f application.yml
+          # kubectl delete -f mysql.yaml
+          # kubectl delete -f ingress.yaml
+          kubectl create namespace stateful-deployment
+          kubectl apply -f gp2-storage-class.yaml --namespace=stateful-deployment
+          kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}' --namespace=stateful-deployment      	
+          kubectl get storageclasses --all-namespaces
+          kubectl apply -f pvc.yaml --namespace=stateful-deployment
+          kubectl get pvc --namespace=stateful-deployment    	
+          kubectl create secret generic mysql-pass --from-literal=password=mysql-pw --namespace=stateful-deployment
+          kubectl get secrets --namespace=stateful-deployment
+          kubectl apply -f mysql.yaml --namespace=stateful-deployment
+          kubectl apply -f wordpress.yaml --namespace=stateful-deployment
+          kubectl get pods -o wide --namespace=stateful-deployment
