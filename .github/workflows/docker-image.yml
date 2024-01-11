@@ -33,15 +33,9 @@ jobs:
           echo "::set-output name=commit_id::$COMMIT_ID"
           docker images
 
-      - name: Configure Kubernetes Context
-        run: |
-          #aws eks --region us-west-2 update-kubeconfig --name sanjay_poc_cluste
-
       - name: Update deployment.yml
         run: |
-          #sed -i "s|image: visalmk/docker-image:latest|image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com/visalrepository:${{ steps.docker_build.outputs.commit_id }}|" application.yml
-
-          sed -i "s|image:.*|image: 861596913187.dkr.ecr.us-west-2.amazonaws.com/pocrepo:${{ steps.docker_build.outputs.commit_id }}|' deployment.yaml
+          sed -i "s|image:.*|image: 861596913187.dkr.ecr.us-west-2.amazonaws.com/pocrepo:${{ steps.docker_build.outputs.commit_id }}|" deployment.yaml
 
       - name: Update Kubeconfig
         run: aws eks --region us-west-2 update-kubeconfig --name sanjay_poc_cluster  # Replace with your EKS cluster name
