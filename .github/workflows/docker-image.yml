@@ -3,7 +3,7 @@ name: Deploy Docker Application to EKS
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
