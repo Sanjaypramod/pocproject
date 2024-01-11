@@ -3,7 +3,7 @@ name: Deploy to EKS
 on:
   push:
     branches:
-      - master  # Change this to your main branch
+      - master  # Adjust to your main branch or desired branch
 
 jobs:
   deploy:
@@ -21,7 +21,16 @@ jobs:
           aws-region: us-west-2  # Replace with your AWS region
 
       - name: Update Kubeconfig
-        run: aws eks --region us-west-2 update-kubeconfig --name sanjay_poc_cluster  # Replace with your EKS cluster name
+        run: |
+          set -e
+          aws eks --region us-west-2 update-kubeconfig --name sanjay_poc_cluster  # Replace with your EKS cluster name
 
       - name: Deploy to EKS
-        run: kubectl apply -f deployment.yaml
+        run: |
+          set -e
+          kubectl apply -f deployment.yaml
+
+      - name: Validate Deployment
+        run: |
+          set -e
+          kubectl get pods
