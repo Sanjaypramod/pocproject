@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: nginx-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
@@ -46,14 +46,5 @@ jobs:
           #kubectl delete -f application.yml
           # kubectl delete -f mysql.yaml
           # kubectl delete -f ingress.yaml
-          kubectl create namespace stateful-deployment
-          kubectl apply -f gp2-storage-class.yaml --namespace=stateful-deployment
-          kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}' --namespace=stateful-deployment      	
-          kubectl get storageclasses --all-namespaces
-          kubectl apply -f pvc.yaml --namespace=stateful-deployment
-          kubectl get pvc --namespace=stateful-deployment    	
-          kubectl create secret generic mysql-pass --from-literal=password=mysql-pw --namespace=stateful-deployment
-          kubectl get secrets --namespace=stateful-deployment
-          kubectl apply -f mysql.yaml --namespace=stateful-deployment
-          kubectl apply -f wordpress.yaml --namespace=stateful-deployment
-          kubectl get pods -o wide --namespace=stateful-deployment
+          
+       
