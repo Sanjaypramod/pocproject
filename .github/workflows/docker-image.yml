@@ -39,7 +39,7 @@ jobs:
 
     #  - name: Update application.yml
     #    run: |
-    #      sed -i "s|image: visalmk/docker-image:latest|image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com/visalrepository:${{ steps.docker_build.outputs.commit_id }}|" application.yml
+    #     run: sed -i 's|image:.*|image: 861596913187.dkr.ecr.us-west-2.amazonaws.com/pocrepo:latest|' deployment.yaml
 
       - name: Deploy to EKS
         run: |
