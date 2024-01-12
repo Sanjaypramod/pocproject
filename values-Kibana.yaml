@@ -1,10 +1,11 @@
 ---
 elasticsearchHosts: "https://elasticsearch-master:9200"
-elasticsearchCertificateSecret: elasticsearch-master-certs
-elasticsearchCertificateAuthoritiesFile: ca.crt
-elasticsearchCredentialSecret: elasticsearch-master-credentials
+# elasticsearchCertificateSecret: elasticsearch-master-certs
+# elasticsearchCertificateAuthoritiesFile: ca.crt
+# elasticsearchCredentialSecret: elasticsearch-master-credentials
 
 replicas: 1
+
 
 # Extra environment variables to append to this nodeGroup
 # This will be appended to the current 'env:' key. You can use any of the kubernetes env
@@ -120,7 +121,7 @@ updateStrategy:
   type: "Recreate"
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   loadBalancerIP: ""
   port: 5601
   nodePort: ""
@@ -173,3 +174,4 @@ lifecycle: {}
 # postStart:
 #   exec:
 #     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
+
