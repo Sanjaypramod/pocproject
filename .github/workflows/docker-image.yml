@@ -44,7 +44,7 @@ jobs:
         run: |
           helm repo add elastic https://helm.elastic.co
           helm repo update
-          helm upgrade --install elasticsearch elastic/elasticsearch -f elasticsearch-values.yaml --namespace elk
+          helm upgrade --install elasticsearch ./elasticsearch --namespace elk
           helm upgrade --install kibana elastic/kibana -f kibana-values.yaml --namespace elk
           kubectl apply -f logstash-deployment.yaml  # Replace with your Logstash deployment file
 
