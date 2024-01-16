@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: 861596913187.dkr.ecr.us-west-1.amazonaws.com/pocrepo:latest
+        image: 861596913187.dkr.ecr.us-west-1.amazonaws.com/pocrepo
         ports:
         - containerPort: 80
 ---
