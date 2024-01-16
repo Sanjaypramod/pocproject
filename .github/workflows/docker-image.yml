@@ -25,9 +25,9 @@ jobs:
         run: |
           COMMIT_ID=$(git rev-parse --short=7 ${{ github.sha }})
           # Tagging the Docker image for ECR
-          docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com/pocrepo:$COMMIT_ID --build-arg AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} --build-arg AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} .
+          docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-1.amazonaws.com/pocrepo:$COMMIT_ID --build-arg AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} --build-arg AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} .
           # Logging into ECR
-          aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com
+          aws ecr get-login-password --region us-west-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-1.amazonaws.com
           # Pushing the Docker image to ECR
           docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com/pocrepo:$COMMIT_ID
           echo "::set-output name=commit_id::$COMMIT_ID"
@@ -35,10 +35,10 @@ jobs:
 
       - name: Update deployment.yml
         run: |
-          sed -i "s|image:.*|image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com/pocrepo:${{ steps.docker_build.outputs.commit_id }}|" deployment.yaml
+          sed -i "s|image:.*|image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-1.amazonaws.com/pocrepo:${{ steps.docker_build.outputs.commit_id }}|" deployment.yaml
 
       - name: Update Kubeconfig
-        run: aws eks --region us-west-2 update-kubeconfig --name sanjay_poc_cluster  # Replace with your EKS cluster name
+        run: aws eks --region us-west-1 update-kubeconfig --name sanjay_poc_cluster  # Replace with your EKS cluster name
 
           # - name: Deploy ELK using Helm
         #run: |
