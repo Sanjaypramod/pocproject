@@ -42,4 +42,5 @@ jobs:
 
       - name: Deploy Helm Chart to EKS
         run: |
-          helm upgrade --install my-website1 ./my-website
+          #helm upgrade --install my-website1 ./my-website
+          helm upgrade my-website1 ./my-website -n elk
