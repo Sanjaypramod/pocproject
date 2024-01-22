@@ -1,0 +1,7 @@
+# Chart.yaml
+
+apiVersion: v2
+name: my-website-chart
+description: A Helm chart for deploying a sample website
+version: 0.1.0
+

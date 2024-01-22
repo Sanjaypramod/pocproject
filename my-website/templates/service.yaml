@@ -1,0 +1,17 @@
+# my-website-chart/templates/service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "my-website-chart.fullname" . }}-service
+  labels:
+    app: {{ include "my-website-chart.name" . }}
+spec:
+  selector:
+    app: {{ include "my-website-chart.name" . }}
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: {{ .Values.service.type }}
+

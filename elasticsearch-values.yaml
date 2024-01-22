@@ -1,0 +1,16 @@
+elasticsearch:
+  resources:
+    limits:
+      cpu: "2"
+      memory: "4Gi"
+    requests:
+      cpu: "1"
+      memory: "2Gi"
+persistence:
+  labels:
+    enabled: true
+service:
+  type: LoadBalancer
+volumeClaimTemplate:
+  storageClassName: gp2-poc
+

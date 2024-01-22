@@ -1,0 +1,16 @@
+# values.yaml
+
+replicaCount: 1
+
+image:
+  repository: 375860358861.dkr.ecr.us-east-2.amazonaws.com/pocrepo
+  pullPolicy: Always
+  tag: "latest"
+
+service:
+  name: ""  # Default is empty; will be generated using the fullname template
+  type: LoadBalancer  # Change the service type to LoadBalancer
+  port: 80
+
+# Add other configuration options as needed
+
