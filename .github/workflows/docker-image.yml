@@ -42,4 +42,4 @@ jobs:
 
       - name: Deploy Helm Chart to EKS
         run: |
-          helm upgrade --install my-website-release ./my-website -f values.yaml
+          helm upgrade --install my-website1 ./my-website -f values.yaml
