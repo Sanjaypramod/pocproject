@@ -1,0 +1,9 @@
+# File name values-Elastic.yaml for Elasticsearch
+replicas: 1
+minimumMasterNodes: 1
+
+volumeClaimTemplate:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 5Gi
